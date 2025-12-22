@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getGameStatus, startGame, closeGame, getUsername, GameInfo } from '../../services/api';
 
 interface OnlineGameRoomProps {
@@ -11,9 +11,10 @@ const OnlineGameRoom = ({ gameId, onBack }: OnlineGameRoomProps) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
   const username = getUsername();
 
-  const fetchGameStatus = async () => {
+  const fetchGameStatus = useCallback(async () => {
     try {
       const info = await getGameStatus(gameId);
       setGameInfo(info);
@@ -23,14 +24,13 @@ const OnlineGameRoom = ({ gameId, onBack }: OnlineGameRoomProps) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [gameId]);
 
   useEffect(() => {
     fetchGameStatus();
     const interval = setInterval(fetchGameStatus, 3000);
     return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameId]);
+  }, [fetchGameStatus]);
 
   const handleStartGame = async () => {
     setActionLoading(true);
@@ -58,7 +58,8 @@ const OnlineGameRoom = ({ gameId, onBack }: OnlineGameRoomProps) => {
 
   const handleCopyGameId = () => {
     navigator.clipboard.writeText(gameId);
-    alert('Código copiado al portapapeles');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   if (loading) {
@@ -101,13 +102,13 @@ const OnlineGameRoom = ({ gameId, onBack }: OnlineGameRoomProps) => {
                 padding: '5px 10px', 
                 fontSize: '0.8em',
                 cursor: 'pointer',
-                backgroundColor: '#4a4a4a',
+                backgroundColor: copied ? '#4a9a4a' : '#4a4a4a',
                 border: '1px solid #666',
                 color: '#d4af37',
                 borderRadius: '3px'
               }}
             >
-              📋 Copiar
+              {copied ? '✅ Copiado' : '📋 Copiar'}
             </button>
           </div>
           <div style={{ marginBottom: '5px' }}>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { listMyGames, GameInfo } from '../../services/api';
 
 interface MyGamesScreenProps {
@@ -12,7 +12,7 @@ const MyGamesScreen = ({ onGameSelect, onBack }: MyGamesScreenProps) => {
   const [error, setError] = useState('');
   const [filter, setFilter] = useState<'todas' | 'creadas' | 'participadas'>('todas');
 
-  const fetchGames = async () => {
+  const fetchGames = useCallback(async () => {
     setLoading(true);
     try {
       const result = await listMyGames(filter);
@@ -23,12 +23,11 @@ const MyGamesScreen = ({ onGameSelect, onBack }: MyGamesScreenProps) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter]);
 
   useEffect(() => {
     fetchGames();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter]);
+  }, [fetchGames]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);

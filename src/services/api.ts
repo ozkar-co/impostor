@@ -97,7 +97,7 @@ const apiCall = async <T>(
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: 'Error de red' }));
+    const error = await response.json().catch(() => ({ message: 'Error de conexión o respuesta inválida' }));
     throw new Error(error.message || `Error: ${response.status}`);
   }
 
