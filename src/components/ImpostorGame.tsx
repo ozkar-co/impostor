@@ -57,13 +57,13 @@ const ImpostorGame = () => {
 
   return (
     <div className="container">
-      <h1>🎭 El Impostor</h1>
+      <h1>El Impostor</h1>
+      <button className="btn-instructions" onClick={() => setShowInstructions(true)}>
+        Instrucciones
+      </button>
       
       {gameState === 'setup' && (
-        <SetupScreen 
-          onStartGame={handleStartGame}
-          onShowInstructions={() => setShowInstructions(true)}
-        />
+        <SetupScreen onStartGame={handleStartGame} />
       )}
       
       {gameState === 'playing' && (

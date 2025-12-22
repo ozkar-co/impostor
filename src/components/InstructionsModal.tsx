@@ -12,7 +12,7 @@ const InstructionsModal: React.FC<InstructionsModalProps> = ({ isOpen, onClose }
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>✕</button>
-        <h2>🎭 Cómo Jugar - El Impostor</h2>
+        <h2>Cómo Jugar - El Impostor</h2>
         
         <div className="instructions-content">
           <h3>Objetivo del Juego</h3>
