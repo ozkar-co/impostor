@@ -3,6 +3,7 @@ import SetupScreen from './SetupScreen';
 import GameScreen from './GameScreen';
 import RoleModal from './RoleModal';
 import GameOver from './GameOver';
+import InstructionsModal from './InstructionsModal';
 import { words } from '../data/words';
 
 type GameState = 'setup' | 'playing' | 'finished';
@@ -14,6 +15,7 @@ const ImpostorGame = () => {
   const [selectedWord, setSelectedWord] = useState('');
   const [impostorIndex, setImpostorIndex] = useState(-1);
   const [showModal, setShowModal] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   const handleStartGame = (playerCount: number, customWord: string) => {
     setTotalPlayers(playerCount);
@@ -48,6 +50,7 @@ const ImpostorGame = () => {
     setSelectedWord('');
     setImpostorIndex(-1);
     setShowModal(false);
+    setShowInstructions(false);
   };
 
   const isCurrentPlayerImpostor = currentPlayerIndex === impostorIndex;
@@ -57,7 +60,10 @@ const ImpostorGame = () => {
       <h1>🎭 El Impostor</h1>
       
       {gameState === 'setup' && (
-        <SetupScreen onStartGame={handleStartGame} />
+        <SetupScreen 
+          onStartGame={handleStartGame}
+          onShowInstructions={() => setShowInstructions(true)}
+        />
       )}
       
       {gameState === 'playing' && (
@@ -78,6 +84,11 @@ const ImpostorGame = () => {
         isImpostor={isCurrentPlayerImpostor}
         word={selectedWord}
         onClose={handleCloseModal}
+      />
+      
+      <InstructionsModal
+        isOpen={showInstructions}
+        onClose={() => setShowInstructions(false)}
       />
     </div>
   );

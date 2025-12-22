@@ -2,9 +2,10 @@ import React from 'react';
 
 interface SetupScreenProps {
   onStartGame: (playerCount: number, customWord: string) => void;
+  onShowInstructions: () => void;
 }
 
-const SetupScreen = ({ onStartGame }: SetupScreenProps) => {
+const SetupScreen = ({ onStartGame, onShowInstructions }: SetupScreenProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
@@ -15,6 +16,10 @@ const SetupScreen = ({ onStartGame }: SetupScreenProps) => {
 
   return (
     <div className="setup-screen">
+      <button className="btn-instructions" onClick={onShowInstructions}>
+        ℹ️ Instrucciones
+      </button>
+      
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="playerCount">Número de jugadores:</label>

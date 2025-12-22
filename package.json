@@ -1,7 +1,9 @@
 {
-  "name": "forjadecodigo",
+  "name": "el-impostor",
+  "description": "Un juego social interactivo donde un jugador es el impostor. Adivina quién es en este emocionante juego de palabras y deducción.",
+  "author": "Oscar Cordero",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "npm run start",

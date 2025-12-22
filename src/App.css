@@ -300,15 +300,174 @@ button:active {
   50% { opacity: 0.7; }
 }
 
-.close-btn {
-  margin-top: 20px;
-  background: linear-gradient(180deg, #4a4a4a 0%, #2a2a2a 100%);
-  border-color: #5a5a5a;
+/* Modal Overlay Styles */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
-.close-btn:hover {
-  background: linear-gradient(180deg, #5a5a5a 0%, #3a3a3a 100%);
-  border-color: #888;
+.modal-overlay[style*="display: none"] {
+  display: none !important;
+}
+
+.modal-content {
+  background: #1f1f1f;
+  border: 3px solid #4a4a4a;
+  border-radius: 0;
+  padding: 40px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease;
+  box-shadow: 
+    0 0 50px rgba(0,0,0,0.9),
+    inset 0 0 20px rgba(0,0,0,0.5);
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 20px 20px;
+  position: relative;
+}
+
+.modal-overlay:not(.hidden) {
+  display: flex !important;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #d4af37;
+  font-size: 28px;
+  cursor: pointer;
+  width: auto;
+  padding: 0;
+  line-height: 1;
+  transition: all 0.3s;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.modal-close:hover {
+  color: #fff;
+  transform: rotate(90deg);
+}
+
+.modal-content h2 {
+  color: #d4af37;
+  margin-bottom: 25px;
+  font-size: 1.8em;
+  font-family: 'Special Elite', cursive;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+  text-align: center;
+}
+
+.instructions-content {
+  color: #b8b8b8;
+  text-align: left;
+  line-height: 1.8;
+}
+
+.instructions-content h3 {
+  color: #d4af37;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.instructions-content p {
+  margin-bottom: 15px;
+  font-size: 0.95em;
+}
+
+.instructions-content ul {
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+
+.instructions-content li {
+  margin-bottom: 10px;
+  font-size: 0.95em;
+}
+
+.instructions-content strong {
+  color: #d4af37;
+  font-weight: 700;
+}
+
+.btn-close {
+  width: 100%;
+  margin-top: 30px;
+  background: linear-gradient(180deg, #3a3a3a 0%, #1a1a1a 100%);
+  color: #d4af37;
+  border: 2px solid #4a4a4a;
+  padding: 15px;
+  font-size: 1.1em;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s;
+}
+
+.btn-close:hover {
+  background: linear-gradient(180deg, #4a4a4a 0%, #2a2a2a 100%);
+  border-color: #d4af37;
+  box-shadow: 
+    0 6px 15px rgba(0,0,0,0.7),
+    0 0 20px rgba(212, 175, 55, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Instructions Button Styles */
+.btn-instructions {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 15px;
+  background: linear-gradient(180deg, #3a3a3a 0%, #1a1a1a 100%);
+  color: #d4af37;
+  border: 2px solid #4a4a4a;
+  border-radius: 0;
+  font-size: 0.9em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Courier Prime', monospace;
+}
+
+.btn-instructions:hover {
+  background: linear-gradient(180deg, #4a4a4a 0%, #2a2a2a 100%);
+  border-color: #d4af37;
+  box-shadow: 
+    0 4px 10px rgba(0,0,0,0.5),
+    0 0 15px rgba(212, 175, 55, 0.2);
+}
+
+.setup-screen {
+  position: relative;
 }
 
 .game-over {
