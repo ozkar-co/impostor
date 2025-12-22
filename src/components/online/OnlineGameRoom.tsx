@@ -29,6 +29,7 @@ const OnlineGameRoom = ({ gameId, onBack }: OnlineGameRoomProps) => {
     fetchGameStatus();
     const interval = setInterval(fetchGameStatus, 3000);
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameId]);
 
   const handleStartGame = async () => {

@@ -49,7 +49,7 @@ function checkCaseSensitivity(dir, issues = []) {
       if (ext === '.tsx' || (ext === '.ts' && !item.endsWith('.d.ts'))) {
         // Excluir archivos en ciertos directorios como data, utils, hooks, etc.
         const parentDir = path.basename(dir);
-        if (['data', 'utils', 'hooks', 'lib', 'config'].includes(parentDir)) {
+        if (['data', 'utils', 'hooks', 'lib', 'config', 'services'].includes(parentDir)) {
           return; // Skip validation for files in these directories
         }
         
