@@ -4,12 +4,14 @@ import GameScreen from './GameScreen';
 import RoleModal from './RoleModal';
 import GameOver from './GameOver';
 import InstructionsModal from './InstructionsModal';
+import ModeSelection from './online/ModeSelection';
+import OnlineGame from './online/OnlineGame';
 import { words } from '../data/words';
 
-type GameState = 'setup' | 'playing' | 'finished';
+type GameState = 'mode-selection' | 'setup' | 'playing' | 'finished' | 'online';
 
 const ImpostorGame = () => {
-  const [gameState, setGameState] = useState<GameState>('setup');
+  const [gameState, setGameState] = useState<GameState>('mode-selection');
   const [totalPlayers, setTotalPlayers] = useState(0);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
   const [selectedWord, setSelectedWord] = useState('');
@@ -45,7 +47,7 @@ const ImpostorGame = () => {
   };
 
   const handleReset = () => {
-    setGameState('setup');
+    setGameState('mode-selection');
     setCurrentPlayerIndex(0);
     setSelectedWord('');
     setImpostorIndex(-1);
@@ -53,14 +55,39 @@ const ImpostorGame = () => {
     setShowInstructions(false);
   };
 
+  const handleSelectLocal = () => {
+    setGameState('setup');
+  };
+
+  const handleSelectOnline = () => {
+    setGameState('online');
+  };
+
+  const handleBackToModeSelection = () => {
+    setGameState('mode-selection');
+  };
+
   const isCurrentPlayerImpostor = currentPlayerIndex === impostorIndex;
 
   return (
     <div className="container">
       <h1>El Impostor</h1>
-      <button className="btn-instructions" onClick={() => setShowInstructions(true)}>
-        Instrucciones
-      </button>
+      {gameState !== 'mode-selection' && gameState !== 'online' && (
+        <button className="btn-instructions" onClick={() => setShowInstructions(true)}>
+          Instrucciones
+        </button>
+      )}
+      
+      {gameState === 'mode-selection' && (
+        <ModeSelection
+          onSelectLocal={handleSelectLocal}
+          onSelectOnline={handleSelectOnline}
+        />
+      )}
+
+      {gameState === 'online' && (
+        <OnlineGame onBack={handleBackToModeSelection} />
+      )}
       
       {gameState === 'setup' && (
         <SetupScreen onStartGame={handleStartGame} />
