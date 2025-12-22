@@ -56,6 +56,61 @@ npm run check-case
 - Verificar que todas las importaciones apunten a archivos existentes
 - Configurar Git para ser case-sensitive en Linux
 
+### upload-words.cjs
+Script interactivo para subir todas las palabras del archivo `src/data/words.ts` a la base de datos.
+
+**Uso:**
+```bash
+npm run upload-words
+```
+
+**Qué hace:**
+- Solicita autenticación (usuario y contraseña)
+- Lee el archivo `src/data/words.ts` y extrae todas las palabras
+- Agrupa las palabras en lotes de 50 (para no sobrecargar el servidor)
+- Sube las palabras a la API con categoría "pop-culture"
+- Detecta palabras duplicadas
+- Proporciona un resumen detallado con estadísticas
+
+**Características:**
+- Autenticación automática en la API
+- Subida en lotes para mejor rendimiento
+- Reporte detallado de palabras subidas, duplicadas y errores
+- Pausas entre solicitudes para no sobrecargar el servidor
+- Mensajes de progreso en tiempo real
+- Colores en la consola para mejor legibilidad
+
+**Ejemplo de salida:**
+```
+📚 Script para subir palabras a la Base de Datos
+
+Ingresa tu usuario: oscar
+Ingresa tu contraseña: ****
+
+🔐 Autenticando...
+✅ Autenticación exitosa
+
+📖 Se encontraron 300 palabras para subir
+
+📦 Se crearán 6 solicitud(es) de carga
+
+📤 Cargando lote 1/6 (50 palabras)...
+✅ Lote 1: 48 palabra(s) subida(s)
+⏭️  Lote 1: 2 palabra(s) ya existía(n)
+
+[... más lotes ...]
+
+==================================================
+📊 RESUMEN DE CARGA
+==================================================
+✅ Palabras subidas: 285
+⏭️  Palabras duplicadas: 15
+📚 Total procesado: 300 de 300
+==================================================
+
+🎉 ¡Éxito! Se subieron 285 nueva(s) palabra(s) a la base de datos
+```
+
 ## Comandos NPM Disponibles
 
 ### `npm start`
@@ -74,6 +129,12 @@ npm run setup
 Ejecuta la verificación de consistencia de nombres de archivos.
 ```bash
 npm run check-case
+```
+
+### `npm run upload-words`
+Sube todas las palabras de `src/data/words.ts` a la base de datos.
+```bash
+npm run upload-words
 ```
 
 ### `npm run dev`

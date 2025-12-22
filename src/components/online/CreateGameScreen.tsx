@@ -7,7 +7,7 @@ interface CreateGameScreenProps {
 }
 
 const CreateGameScreen = ({ onGameCreated, onBack }: CreateGameScreenProps) => {
-  const [filtro, setFiltro] = useState<'sistema' | 'todas'>('sistema');
+  const [filtro, setFiltro] = useState<'sistema' | 'todas' | 'usuarios'>('sistema');
   const [numImpostores, setNumImpostores] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -15,13 +15,25 @@ const CreateGameScreen = ({ onGameCreated, onBack }: CreateGameScreenProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    
+    if (filtro === 'usuarios') {
+      // Nota: Si selecciona solo palabras de usuarios y no hay ninguna,
+      // el backend retornará un error apropiado
+    }
+    
     setLoading(true);
 
     try {
-      const result = await createGame(filtro, numImpostores);
+      const result = await createGame(filtro as 'sistema' | 'todas', numImpostores);
       onGameCreated(result.id_partida);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al crear la partida');
+      const errorMsg = err instanceof Error ? err.message : 'Error al crear la partida';
+      // Manejar específicamente el error de sin palabras
+      if (errorMsg.includes('palabras') || errorMsg.includes('palabra')) {
+        setError(`${errorMsg}. Intenta con otra opción de palabras.`);
+      } else {
+        setError(errorMsg);
+      }
     } finally {
       setLoading(false);
     }
@@ -36,12 +48,18 @@ const CreateGameScreen = ({ onGameCreated, onBack }: CreateGameScreenProps) => {
           <select
             id="filtro"
             value={filtro}
-            onChange={(e) => setFiltro(e.target.value as 'sistema' | 'todas')}
+            onChange={(e) => setFiltro(e.target.value as 'sistema' | 'todas' | 'usuarios')}
             disabled={loading}
           >
-            <option value="sistema">Solo palabras del sistema</option>
-            <option value="todas">Todas las palabras</option>
+            <option value="sistema">Solo palabras del sistema (locales)</option>
+            <option value="todas">Todas las palabras (sistema + usuarios)</option>
+            <option value="usuarios">Solo palabras de usuarios</option>
           </select>
+          <p style={{ fontSize: '0.85em', color: '#888', marginTop: '8px' }}>
+            💡 {filtro === 'sistema' && 'Usa palabras predefinidas del juego.'}
+            {filtro === 'todas' && 'Combina palabras del sistema con las propuestas por usuarios.'}
+            {filtro === 'usuarios' && 'Solo usa palabras que han propuesto otros jugadores.'}
+          </p>
         </div>
         <div className="form-group">
           <label htmlFor="impostores">Número de impostores:</label>
@@ -62,7 +80,7 @@ const CreateGameScreen = ({ onGameCreated, onBack }: CreateGameScreenProps) => {
           </div>
         )}
         <div style={{ display: 'flex', gap: '10px' }}>
-          <button type="button" className="btn-start" onClick={onBack} disabled={loading} style={{ backgroundColor: '#555' }}>
+          <button type="button" className="btn-start" onClick={onBack} disabled={loading} style={{ backgroundColor: '#555' }}>>
             Volver
           </button>
           <button type="submit" className="btn-start" disabled={loading}>

@@ -61,14 +61,14 @@ const ProposeWordsScreen = ({ onBack }: ProposeWordsScreenProps) => {
         <div className="form-group">
           <label>Palabras a proponer:</label>
           {words.map((word: string, index: number) => (
-            <div key={index} style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+            <div key={index} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
               <input
                 type="text"
                 value={word}
                 onChange={(e) => handleWordChange(index, e.target.value)}
                 placeholder="Escribe una palabra"
                 disabled={loading}
-                style={{ flex: 1 }}
+                style={{ flex: 1, minWidth: 0 }}
               />
               {words.length > 1 && (
                 <button
@@ -81,7 +81,10 @@ const ProposeWordsScreen = ({ onBack }: ProposeWordsScreenProps) => {
                     border: 'none',
                     color: 'white',
                     cursor: 'pointer',
-                    borderRadius: '3px'
+                    borderRadius: '3px',
+                    flexShrink: 0,
+                    width: 'auto',
+                    minWidth: 'fit-content'
                   }}
                 >
                   ✖
