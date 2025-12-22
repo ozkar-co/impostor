@@ -5,12 +5,49 @@ Un emocionante juego social donde un jugador es elegido al azar como **"El Impos
 ## 🎮 Características
 
 - 🎯 **Juego Social Divertido** - Perfecto para jugar con amigos y familia
+- 🌐 **Modo Online** - Juega a distancia con código de partida (¡NUEVO!)
+- 🎮 **Modo Local** - Juega en persona pasando el dispositivo
 - 🎲 **Palabra Aleatoria** - Se selecciona una palabra diferente cada partida
 - 👥 **Múltiples Jugadores** - Soporta de 3 a 12 jugadores
 - 🎨 **Interfaz Moderna** - Diseño limpio y fácil de usar
 - 📱 **Responsive** - Funciona en móviles, tablets y computadoras
 - ⚡ **Rápido e Instantáneo** - Sin necesidad de descargar nada
-- 🔄 **Palabras Personalizadas** - Opción para usar tu propia palabra
+- 🔄 **Palabras Personalizadas** - Opción para usar tu propia palabra o proponer nuevas
+
+## 📋 Modos de Juego
+
+### 🎮 Modo Local
+El modo clásico donde todos los jugadores están juntos físicamente y pasan el dispositivo entre sí.
+
+1. **Selecciona "Modo Local"**
+2. **Elige el número de jugadores** (3-12)
+3. **Opcionalmente, ingresa una palabra personalizada**
+4. **Cada jugador toca "Ver Mi Rol"** en su turno
+5. **¡Juega!** - Haz preguntas para descubrir al impostor
+
+### 🌐 Modo Online (¡NUEVO!)
+Juega con amigos a distancia a través de videollamadas o chat.
+
+**Crear una partida:**
+1. **Inicia sesión** con tu cuenta
+2. **Selecciona "Crear Nueva Partida"**
+3. **Configura** el filtro de palabras y número de impostores
+4. **Comparte el código** de 6 caracteres con tus amigos
+5. **Espera** a que todos se unan
+6. **Inicia la partida** cuando estén listos
+
+**Unirse a una partida:**
+1. **Inicia sesión** con tu cuenta
+2. **Selecciona "Unirse a Partida"**
+3. **Ingresa el código** que te compartió el creador
+4. **Espera** a que el creador inicie la partida
+5. **Ve tu rol** (impostor o palabra secreta)
+
+**Características adicionales del modo online:**
+- 📋 **Mis Partidas** - Consulta tu historial de partidas
+- 💭 **Proponer Palabras** - Sugiere nuevas palabras para el juego
+- 🔄 **Actualización en tiempo real** - El estado de la partida se actualiza automáticamente
+- 🎯 **Múltiples impostores** - Configura partidas con 1-5 impostores
 
 ## 📋 Cómo Jugar
 
@@ -33,21 +70,13 @@ Jugador 3: "¿Es dulce?" → Impostor: "A veces..."
 Jugador 4: "¡Eres el impostor!" → Votación → ¡Correcto!
 ```
 
-## 🚀 Inicio Rápido
-
-1. **Abre la aplicación** en tu navegador
-2. **Selecciona el número de jugadores** (3-12)
-3. **Opcionalmente, ingresa una palabra personalizada**
-4. **Haz clic en "Comenzar Juego"**
-5. **Cada jugador toca "Ver Mi Rol"** para descubrir si es el impostor o conocer la palabra
-6. **¡Juega!** - Haz preguntas inteligentes para descubrir al impostor o para ocultarte
-
 ## 🛠️ Tecnologías
 
 - **React 18** - Biblioteca de UI
 - **TypeScript** - Seguridad de tipos
 - **Vite** - Herramienta de construcción rápida
 - **Firebase** - Alojamiento en la nube
+- **API Backend** - Sistema de partidas online (forja-api.onrender.com)
 - **CSS3** - Estilos modernos
 
 ## 📁 Estructura del Proyecto
