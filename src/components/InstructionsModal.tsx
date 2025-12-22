@@ -18,46 +18,64 @@ const InstructionsModal: React.FC<InstructionsModalProps> = ({ isOpen, onClose }
           <h3>Objetivo del Juego</h3>
           <p>
             Un jugador es elegido al azar como <strong>"El Impostor"</strong>. 
-            Los otros jugadores deben adivinarlo mientras él intenta ocultarse entre el grupo.
+            Todos excepto el impostor conocen una palabra secreta. Los jugadores deben votar juntos 
+            para expulsar al impostor antes de que termine el juego.
           </p>
 
-          <h3>Reglas Básicas</h3>
+          <h3>Cómo Funciona</h3>
+          <ol style={{ marginLeft: '20px', marginBottom: '15px' }}>
+            <li style={{ marginBottom: '10px' }}>
+              <strong>Revelación de Rol:</strong> Cada jugador toca "Ver Mi Rol" para descubrir si es 
+              el impostor o conocer la palabra secreta.
+            </li>
+            <li style={{ marginBottom: '10px' }}>
+              <strong>Las Rondas (3 rondas):</strong> En cada ronda, los jugadores comparten palabras 
+              o características asociadas a la palabra secreta. El impostor intenta diferenciar la palabra 
+              sin revelar su ignorancia.
+            </li>
+            <li style={{ marginBottom: '10px' }}>
+              <strong>La Votación:</strong> Después de 3 rondas, todos votan para decidir quién expulsar.
+            </li>
+          </ol>
+
+          <h3>Condiciones de Victoria</h3>
           <ul>
-            <li><strong>La Palabra:</strong> Se selecciona una palabra al azar (o personalizada) que conocen todos excepto el impostor.</li>
-            <li><strong>Ronda de Preguntas:</strong> Los jugadores hacen preguntas sobre la palabra para identificar pistas.</li>
-            <li><strong>Votación:</strong> Después de las preguntas, votan juntos para decidir quién es el impostor.</li>
+            <li><strong>Ciudadanos Ganan:</strong> Si logran expulsar al impostor durante la votación.</li>
+            <li><strong>Impostor Gana:</strong> Si los ciudadanos votan incorrectamente y expulsan a alguien que no es el impostor.</li>
           </ul>
 
-          <h3>Turnos en la App</h3>
-          <ul>
-            <li>Cada jugador toca el botón "Ver Mi Rol" en su turno.</li>
-            <li>La aplicación mostrará si es el impostor o la palabra que debe conocer.</li>
-            <li>Después de que todos los jugadores hayan visto su rol, pasarán a la pantalla de finalización.</li>
-          </ul>
-
-          <h3>Cómo Ganar</h3>
-          <ul>
-            <li><strong>Ciudadanos ganan:</strong> Si logran identificar al impostor correctamente.</li>
-            <li><strong>Impostor gana:</strong> Si consigue que voten a un ciudadano normal o si todos lo creen cuando miente.</li>
-          </ul>
-
-          <h3>Consejos Útiles</h3>
-          <ul>
-            <li>El impostor debe hacer preguntas que parezcan genuinas pero que no revelen su identidad.</li>
-            <li>Los ciudadanos deben hacer preguntas inteligentes para detectar mentiras.</li>
-            <li>¡Es un juego social - actúa de forma convincente!</li>
-          </ul>
-
-          <h3>Ejemplo de Juego</h3>
-          <p>
-            <strong>Palabra seleccionada:</strong> "Pizza"<br/>
-            <strong>Impostor:</strong> Jugador 3<br/>
-            Jugador 1: "¿Es algo que comes?"<br/>
-            Jugador 3 (Impostor): "Sí, claro" (sin saber qué es)<br/>
-            Jugador 2: "¿Tiene ingredientes de origen animal?"<br/>
-            Jugador 3: "A veces" (respuesta vaga para no revelar que no sabe)<br/>
-            ¡El grupo debe descubrir al impostor antes de que termine la ronda!
+          <h3>Ejemplo de Ronda</h3>
+          <p style={{ fontSize: '0.9em', fontStyle: 'italic', marginBottom: '15px' }}>
+            <strong>Palabra Secreta:</strong> "Pizza"
           </p>
+          <div style={{ 
+            background: 'rgba(0,0,0,0.3)', 
+            padding: '15px', 
+            marginBottom: '15px',
+            borderLeft: '3px solid #d4af37'
+          }}>
+            <p style={{ marginBottom: '8px' }}>
+              <strong>Jugador 1:</strong> "Comida italiana"
+            </p>
+            <p style={{ marginBottom: '8px' }}>
+              <strong>Jugador 2 (Impostor):</strong> "Se come caliente" (respuesta vaga para ocultar ignorancia)
+            </p>
+            <p style={{ marginBottom: '8px' }}>
+              <strong>Jugador 3:</strong> "Tiene queso y salsa"
+            </p>
+            <p>
+              <strong>Resultado:</strong> El grupo nota respuestas sospechosas de Jugador 2 y lo expulsa. ¡Los ciudadanos ganan!
+            </p>
+          </div>
+
+          <h3>Consejos Estratégicos</h3>
+          <ul>
+            <li><strong>Para los Ciudadanos:</strong> Escucha atentamente las descripciones. El impostor 
+            puede cometer errores al describir la palabra.</li>
+            <li><strong>Para el Impostor:</strong> Sé vago pero creíble. Pregunta a otros jugadores para 
+            deducir la palabra sin revelar tu ignorancia.</li>
+            <li><strong>General:</strong> ¡Es un juego social - actúa convincentemente!</li>
+          </ul>
         </div>
 
         <button className="btn-close" onClick={onClose}>Entendido</button>
