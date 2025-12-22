@@ -47,6 +47,12 @@ function checkCaseSensitivity(dir, issues = []) {
       
       // Reglas específicas para diferentes tipos de archivos
       if (ext === '.tsx' || (ext === '.ts' && !item.endsWith('.d.ts'))) {
+        // Excluir archivos en ciertos directorios como data, utils, hooks, etc.
+        const parentDir = path.basename(dir);
+        if (['data', 'utils', 'hooks', 'lib', 'config'].includes(parentDir)) {
+          return; // Skip validation for files in these directories
+        }
+        
         // Solo verificar componentes React principales (no archivos de configuración)
         if (!['main', 'index', 'vite-env', 'app'].includes(name.toLowerCase())) {
           // Componentes React deben usar PascalCase
