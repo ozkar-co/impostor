@@ -112,7 +112,8 @@ export const login = async (username: string, password: string): Promise<LoginRe
   });
   
   setToken(data.token);
-  setUsername(data.username);
+  // Usar el username del parámetro si la respuesta no lo contiene
+  setUsername(data.username || username);
   return data;
 };
 
