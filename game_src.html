@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego del Impostor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .setup-screen, .game-screen {
+            display: none;
+        }
+
+        .setup-screen.active, .game-screen.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1em;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1em;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        input[type="text"]::placeholder {
+            color: #999;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .player-info {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .player-number {
+            font-size: 1.5em;
+            color: #667eea;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .progress {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .role-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .word {
+            color: #667eea;
+        }
+
+        .impostor {
+            color: #e74c3c;
+        }
+
+        .word-display {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .close-btn {
+            margin-top: 20px;
+            background: #95a5a6;
+        }
+
+        .close-btn:hover {
+            background: #7f8c8d;
+        }
+
+        .game-over {
+            display: none;
+            text-align: center;
+        }
+
+        .game-over h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .game-over p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎭 El Impostor</h1>
+        
+        <div class="setup-screen active">
+            <div class="form-group">
+                <label for="playerCount">Número de jugadores:</label>
+                <select id="playerCount">
+                    <option value="3">3 jugadores</option>
+                    <option value="4">4 jugadores</option>
+                    <option value="5">5 jugadores</option>
+                    <option value="6">6 jugadores</option>
+                    <option value="7">7 jugadores</option>
+                    <option value="8">8 jugadores</option>
+                    <option value="9">9 jugadores</option>
+                    <option value="10">10 jugadores</option>
+                    <option value="11">11 jugadores</option>
+                    <option value="12">12 jugadores</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="customWord">Palabra personalizada (opcional):</label>
+                <input type="text" id="customWord" placeholder="Deja en blanco para palabra aleatoria">
+            </div>
+            <button onclick="startGame()">Comenzar Juego</button>
+        </div>
+
+        <div class="game-screen">
+            <div class="player-info">
+                <div class="player-number">Jugador <span id="currentPlayer">1</span></div>
+                <div class="progress">
+                    <span id="playersRevealed">0</span> de <span id="totalPlayers">0</span> revelados
+                </div>
+            </div>
+            <button onclick="revealRole()">Ver mi rol</button>
+        </div>
+
+        <div class="game-over">
+            <h2>¡Juego terminado!</h2>
+            <p>Todos los jugadores han visto sus roles. ¡Que comience la discusión!</p>
+            <button class="reset-btn" onclick="resetGame()">Nuevo Juego</button>
+        </div>
+    </div>
+
+    <div class="modal" id="roleModal">
+        <div class="modal-content">
+            <div class="role-title">
+                <span id="roleText"></span>
+            </div>
+            <div class="word-display" id="wordDisplay"></div>
+            <p style="color: #666; margin-top: 20px;">Memoriza tu rol y cierra esta ventana</p>
+            <button class="close-btn" onclick="closeModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        const words = [
+            "Playa", "Montaña", "Bosque", "Desierto", "Pizza", "Hamburguesa", 
+            "Sushi", "Tacos", "Perro", "Gato", "Elefante", "León", 
+            "Fútbol", "Basketball", "Tennis", "Natación", "Guitarra", "Piano", 
+            "Batería", "Violín", "Verano", "Invierno", "Primavera", "Otoño",
+            "Café", "Té", "Jugo", "Agua", "Cine", "Teatro", "Circo", "Museo",
+            "Doctor", "Profesor", "Bombero", "Chef", "Avión", "Barco", "Tren", "Bicicleta"
+        ];
+
+        let totalPlayers = 0;
+        let currentPlayerIndex = 0;
+        let selectedWord = "";
+        let impostorIndex = -1;
+        let roles = [];
+
+        function startGame() {
+            totalPlayers = parseInt(document.getElementById('playerCount').value);
+            currentPlayerIndex = 0;
+            
+            const customWord = document.getElementById('customWord').value.trim();
+            selectedWord = customWord || words[Math.floor(Math.random() * words.length)];
+            
+            impostorIndex = Math.floor(Math.random() * totalPlayers);
+            
+            roles = [];
+            for (let i = 0; i < totalPlayers; i++) {
+                roles.push(i === impostorIndex ? 'impostor' : 'word');
+            }
+            
+            document.querySelector('.setup-screen').classList.remove('active');
+            document.querySelector('.game-screen').classList.add('active');
+            document.querySelector('.game-over').style.display = 'none';
+            
+            document.getElementById('totalPlayers').textContent = totalPlayers;
+            updateProgress();
+        }
+
+        function revealRole() {
+            const modal = document.getElementById('roleModal');
+            const roleText = document.getElementById('roleText');
+            const wordDisplay = document.getElementById('wordDisplay');
+            
+            if (roles[currentPlayerIndex] === 'impostor') {
+                roleText.textContent = '¡Eres el';
+                roleText.className = 'role-title impostor';
+                wordDisplay.textContent = 'IMPOSTOR!';
+                wordDisplay.className = 'word-display impostor';
+            } else {
+                roleText.textContent = 'Tu palabra es:';
+                roleText.className = 'role-title word';
+                wordDisplay.textContent = selectedWord;
+                wordDisplay.className = 'word-display word';
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('roleModal');
+            modal.classList.remove('active');
+            
+            currentPlayerIndex++;
+            
+            if (currentPlayerIndex >= totalPlayers) {
+                document.querySelector('.game-screen').classList.remove('active');
+                document.querySelector('.game-over').style.display = 'block';
+            } else {
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            document.getElementById('currentPlayer').textContent = currentPlayerIndex + 1;
+            document.getElementById('playersRevealed').textContent = currentPlayerIndex;
+        }
+
+        function resetGame() {
+            document.querySelector('.game-over').style.display = 'none';
+            document.querySelector('.setup-screen').classList.add('active');
+            document.getElementById('customWord').value = '';
+        }
+    </script>
+</body>
+</html>
