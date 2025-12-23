@@ -56,16 +56,18 @@ const ProposeWordsScreen = ({ onBack }: ProposeWordsScreenProps) => {
       const feedbackList: FeedbackWord[] = [];
       
       // Agregar palabras creadas
-      result.palabras_creadas.forEach(palabra => {
-        feedbackList.push({
-          palabra: palabra.palabra,
-          slug: palabra.slug,
-          estado: 'creada'
+      if (result.palabras_creadas && Array.isArray(result.palabras_creadas)) {
+        result.palabras_creadas.forEach(palabra => {
+          feedbackList.push({
+            palabra: palabra.palabra,
+            slug: palabra.slug,
+            estado: 'creada'
+          });
         });
-      });
+      }
       
       // Agregar palabras omitidas
-      if (result.palabras_omitidas && result.palabras_omitidas.length > 0) {
+      if (result.palabras_omitidas && Array.isArray(result.palabras_omitidas) && result.palabras_omitidas.length > 0) {
         result.palabras_omitidas.forEach(omitted => {
           feedbackList.push({
             palabra: omitted.palabra,

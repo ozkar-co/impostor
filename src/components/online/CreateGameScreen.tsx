@@ -80,7 +80,7 @@ const CreateGameScreen = ({ onGameCreated, onBack }: CreateGameScreenProps) => {
           </div>
         )}
         <div style={{ display: 'flex', gap: '10px' }}>
-          <button type="button" className="btn-start" onClick={onBack} disabled={loading} style={{ backgroundColor: '#555' }}>>
+          <button type="button" className="btn-start" onClick={onBack} disabled={loading} style={{ backgroundColor: '#555' }}>
             Volver
           </button>
           <button type="submit" className="btn-start" disabled={loading}>
