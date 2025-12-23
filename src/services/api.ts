@@ -27,6 +27,20 @@ export interface WordProposal {
   categoria?: string;
 }
 
+export interface OmittedWord {
+  palabra: string;
+  slug: string;
+  razon: string;
+}
+
+export interface ProposeWordsResponse {
+  palabras_creadas: Word[];
+  total_creadas: number;
+  palabras_omitidas?: OmittedWord[];
+  total_omitidas?: number;
+  message: string;
+}
+
 export interface CreateGameRequest {
   filtro_palabras: 'sistema' | 'todas';
   numero_impostores: number;
@@ -123,8 +137,8 @@ export const logout = (): void => {
 };
 
 // Words
-export const proposeWords = async (palabras: WordProposal[]): Promise<{ message: string; palabras: Word[] }> => {
-  return apiCall('/impostor/palabras', {
+export const proposeWords = async (palabras: WordProposal[]): Promise<ProposeWordsResponse> => {
+  return apiCall<ProposeWordsResponse>('/impostor/palabras', {
     method: 'POST',
     body: JSON.stringify({ palabras }),
   });

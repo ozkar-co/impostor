@@ -5,11 +5,18 @@ interface ProposeWordsScreenProps {
   onBack: () => void;
 }
 
+interface FeedbackWord {
+  palabra: string;
+  slug: string;
+  razon?: string;
+  estado: 'creada' | 'omitida';
+}
+
 const ProposeWordsScreen = ({ onBack }: ProposeWordsScreenProps) => {
   const [words, setWords] = useState<string[]>(['']);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [feedback, setFeedback] = useState<FeedbackWord[]>([]);
 
   const handleAddWord = () => {
     setWords([...words, '']);
@@ -28,7 +35,7 @@ const ProposeWordsScreen = ({ onBack }: ProposeWordsScreenProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setSuccess('');
+    setFeedback([]);
 
     const filteredWords = words.filter((w: string) => w.trim().length > 0);
     if (filteredWords.length === 0) {
@@ -44,10 +51,40 @@ const ProposeWordsScreen = ({ onBack }: ProposeWordsScreenProps) => {
     setLoading(true);
     try {
       const result = await proposeWords(wordProposals);
-      setSuccess(result.message);
-      setWords(['']);
+      
+      // Construir feedback detallado
+      const feedbackList: FeedbackWord[] = [];
+      
+      // Agregar palabras creadas
+      result.palabras_creadas.forEach(palabra => {
+        feedbackList.push({
+          palabra: palabra.palabra,
+          slug: palabra.slug,
+          estado: 'creada'
+        });
+      });
+      
+      // Agregar palabras omitidas
+      if (result.palabras_omitidas && result.palabras_omitidas.length > 0) {
+        result.palabras_omitidas.forEach(omitted => {
+          feedbackList.push({
+            palabra: omitted.palabra,
+            slug: omitted.slug,
+            razon: omitted.razon,
+            estado: 'omitida'
+          });
+        });
+      }
+      
+      setFeedback(feedbackList);
+      
+      // Limpiar inputs si se crearon palabras
+      if (result.total_creadas > 0) {
+        setWords(['']);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al proponer las palabras');
+      setFeedback([]);
     } finally {
       setLoading(false);
     }
@@ -112,14 +149,38 @@ const ProposeWordsScreen = ({ onBack }: ProposeWordsScreenProps) => {
         </div>
 
         {error && (
-          <div style={{ color: '#ff4444', marginBottom: '15px', textAlign: 'center' }}>
+          <div style={{ color: '#ff4444', marginBottom: '15px', textAlign: 'center', padding: '10px', backgroundColor: 'rgba(255, 68, 68, 0.1)', borderRadius: '4px' }}>
             {error}
           </div>
         )}
 
-        {success && (
-          <div style={{ color: '#00ff00', marginBottom: '15px', textAlign: 'center' }}>
-            ✅ {success}
+        {feedback.length > 0 && (
+          <div style={{ marginBottom: '15px' }}>
+            {feedback.some(f => f.estado === 'creada') && (
+              <div style={{ marginBottom: '10px' }}>
+                <h4 style={{ color: '#00ff00', marginBottom: '8px' }}>✅ Palabras Creadas ({feedback.filter(f => f.estado === 'creada').length})</h4>
+                {feedback
+                  .filter(f => f.estado === 'creada')
+                  .map((item, idx) => (
+                    <div key={idx} style={{ color: '#00ff00', fontSize: '0.9em', marginBottom: '4px', paddingLeft: '10px' }}>
+                      • {item.palabra}
+                    </div>
+                  ))}
+              </div>
+            )}
+            
+            {feedback.some(f => f.estado === 'omitida') && (
+              <div>
+                <h4 style={{ color: '#ffaa00', marginBottom: '8px' }}>⏭️ Palabras Omitidas ({feedback.filter(f => f.estado === 'omitida').length})</h4>
+                {feedback
+                  .filter(f => f.estado === 'omitida')
+                  .map((item, idx) => (
+                    <div key={idx} style={{ color: '#ffaa00', fontSize: '0.9em', marginBottom: '4px', paddingLeft: '10px' }}>
+                      • {item.palabra} - <span style={{ fontSize: '0.85em' }}>{item.razon}</span>
+                    </div>
+                  ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -137,3 +198,4 @@ const ProposeWordsScreen = ({ onBack }: ProposeWordsScreenProps) => {
 };
 
 export default ProposeWordsScreen;
+
