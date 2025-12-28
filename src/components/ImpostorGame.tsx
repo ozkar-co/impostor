@@ -27,10 +27,12 @@ const ImpostorGame = () => {
     setSelectedWord(word);
     
     // Select multiple random impostors
+    // Ensure impostorCount doesn't exceed playerCount
+    const validImpostorCount = Math.min(impostorCount, playerCount);
     const indices: number[] = [];
     const availableIndices = Array.from({ length: playerCount }, (_, i) => i);
     
-    for (let i = 0; i < impostorCount; i++) {
+    for (let i = 0; i < validImpostorCount; i++) {
       const randomIdx = Math.floor(Math.random() * availableIndices.length);
       indices.push(availableIndices[randomIdx]);
       availableIndices.splice(randomIdx, 1);

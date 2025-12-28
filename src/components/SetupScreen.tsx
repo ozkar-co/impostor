@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface SetupScreenProps {
   onStartGame: (playerCount: number, customWord: string, impostorCount: number) => void;
 }
 
 const SetupScreen = ({ onStartGame }: SetupScreenProps) => {
+  const [playerCount, setPlayerCount] = useState(3);
+  const [impostorCount, setImpostorCount] = useState(1);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
-    const playerCount = parseInt((form.elements.namedItem('playerCount') as HTMLSelectElement).value);
     const customWord = (form.elements.namedItem('customWord') as HTMLInputElement).value.trim();
-    const impostorCount = parseInt((form.elements.namedItem('impostorCount') as HTMLSelectElement).value);
     onStartGame(playerCount, customWord, impostorCount);
   };
 
@@ -18,7 +19,19 @@ const SetupScreen = ({ onStartGame }: SetupScreenProps) => {
     <form className="setup-screen" onSubmit={handleSubmit}>
       <div className="form-group">
         <label htmlFor="playerCount">Número de jugadores:</label>
-        <select id="playerCount" name="playerCount">
+        <select 
+          id="playerCount" 
+          name="playerCount" 
+          value={playerCount} 
+          onChange={(e) => {
+            const newPlayerCount = parseInt(e.target.value);
+            setPlayerCount(newPlayerCount);
+            // Adjust impostor count if it exceeds new player count
+            if (impostorCount > newPlayerCount) {
+              setImpostorCount(Math.min(6, newPlayerCount));
+            }
+          }}
+        >
           <option value="3">3 jugadores</option>
           <option value="4">4 jugadores</option>
           <option value="5">5 jugadores</option>
@@ -45,13 +58,17 @@ const SetupScreen = ({ onStartGame }: SetupScreenProps) => {
       </div>
       <div className="form-group">
         <label htmlFor="impostorCount">Número de impostores:</label>
-        <select id="impostorCount" name="impostorCount">
-          <option value="1">1 impostor</option>
-          <option value="2">2 impostores</option>
-          <option value="3">3 impostores</option>
-          <option value="4">4 impostores</option>
-          <option value="5">5 impostores</option>
-          <option value="6">6 impostores</option>
+        <select 
+          id="impostorCount" 
+          name="impostorCount" 
+          value={impostorCount} 
+          onChange={(e) => setImpostorCount(parseInt(e.target.value))}
+        >
+          {[1, 2, 3, 4, 5, 6].filter(num => num <= playerCount).map(num => (
+            <option key={num} value={num}>
+              {num} impostor{num > 1 ? 'es' : ''}
+            </option>
+          ))}
         </select>
       </div>
       <div className="form-group">
