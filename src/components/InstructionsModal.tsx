@@ -29,6 +29,12 @@ const InstructionsModal: React.FC<InstructionsModalProps> = ({ isOpen, onClose }
               el impostor o conocer la palabra secreta.
             </li>
             <li style={{ marginBottom: '10px' }}>
+              <strong>Pistas para Impostores (Modo Local):</strong> En el modo local, puedes activar 
+              la opción "Dar pistas a los impostores" antes de iniciar el juego. Esto proporciona 
+              una pequeña ayuda a los impostores (como "Empieza por X" o características de la palabra). 
+              En partidas con múltiples impostores, cada uno recibe una pista diferente.
+            </li>
+            <li style={{ marginBottom: '10px' }}>
               <strong>Las Rondas (3 rondas):</strong> En cada ronda, los jugadores comparten palabras 
               o características asociadas a la palabra secreta. El impostor intenta diferenciar la palabra 
               sin revelar su ignorancia.

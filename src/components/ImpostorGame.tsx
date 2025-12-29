@@ -7,8 +7,17 @@ import InstructionsModal from './InstructionsModal';
 import ModeSelection from './online/ModeSelection';
 import OnlineGame from './online/OnlineGame';
 import { words } from '../data/words';
+import { clues } from '../data/clues';
 
 type GameState = 'mode-selection' | 'setup' | 'playing' | 'finished' | 'online';
+
+const generateFallbackClue = (word: string): string => {
+  const fallbackClues = [
+    `Empieza por "${word.charAt(0)}"`,
+    `Tiene ${word.length} letras`
+  ];
+  return fallbackClues[Math.floor(Math.random() * fallbackClues.length)];
+};
 
 const ImpostorGame = () => {
   const [gameState, setGameState] = useState<GameState>('mode-selection');
@@ -18,8 +27,9 @@ const ImpostorGame = () => {
   const [impostorIndices, setImpostorIndices] = useState<number[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
+  const [impostorClues, setImpostorClues] = useState<Record<number, string>>({});
 
-  const handleStartGame = (playerCount: number, customWord: string, impostorCount: number) => {
+  const handleStartGame = (playerCount: number, customWord: string, impostorCount: number, cluesEnabled: boolean) => {
     setTotalPlayers(playerCount);
     setCurrentPlayerIndex(0);
     
@@ -39,6 +49,29 @@ const ImpostorGame = () => {
     }
     
     setImpostorIndices(indices);
+    
+    // Assign clues to impostors if enabled
+    if (cluesEnabled) {
+      const cluesMap: Record<number, string> = {};
+      const wordClues = clues[word];
+      
+      if (wordClues && wordClues.length > 0) {
+        // If we have clues for the word, assign different ones to each impostor
+        indices.forEach((impostorIdx, i) => {
+          const clueIndex = i % wordClues.length;
+          cluesMap[impostorIdx] = wordClues[clueIndex];
+        });
+      } else {
+        // Generate fallback clues when no clues exist for the word
+        indices.forEach((impostorIdx) => {
+          cluesMap[impostorIdx] = generateFallbackClue(word);
+        });
+      }
+      
+      setImpostorClues(cluesMap);
+    } else {
+      setImpostorClues({});
+    }
     
     setGameState('playing');
   };
@@ -64,6 +97,7 @@ const ImpostorGame = () => {
     setImpostorIndices([]);
     setShowModal(false);
     setShowInstructions(false);
+    setImpostorClues({});
   };
 
   const handleSelectLocal = () => {
@@ -79,6 +113,7 @@ const ImpostorGame = () => {
   };
 
   const isCurrentPlayerImpostor = impostorIndices.includes(currentPlayerIndex);
+  const currentPlayerClue = isCurrentPlayerImpostor ? impostorClues[currentPlayerIndex] : undefined;
 
   return (
     <div className="container">
@@ -121,6 +156,7 @@ const ImpostorGame = () => {
         isOpen={showModal}
         isImpostor={isCurrentPlayerImpostor}
         word={selectedWord}
+        clue={currentPlayerClue}
         onClose={handleCloseModal}
       />
       
