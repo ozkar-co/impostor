@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { isAuthenticated } from '../../services/api';
+import { useState, useEffect } from 'react';
+import { isAuthenticated, setAuthErrorCallback } from '../../services/api';
 import LoginScreen from './LoginScreen';
 import OnlineLobby from './OnlineLobby';
 import CreateGameScreen from './CreateGameScreen';
@@ -24,6 +24,19 @@ interface OnlineGameProps {
 const OnlineGame = ({ onBack }: OnlineGameProps) => {
   const [screen, setScreen] = useState<OnlineScreen>(isAuthenticated() ? 'lobby' : 'login');
   const [currentGameId, setCurrentGameId] = useState<string>('');
+
+  // Registrar el callback para cuando hay un error de autenticación
+  useEffect(() => {
+    const handleAuthError = () => {
+      setScreen('login');
+      setCurrentGameId('');
+    };
+
+    setAuthErrorCallback(handleAuthError);
+
+    // Limpiar el callback al desmontar
+    return () => setAuthErrorCallback(null);
+  }, []);
 
   const handleLoginSuccess = () => {
     setScreen('lobby');

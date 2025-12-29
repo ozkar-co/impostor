@@ -90,6 +90,13 @@ export const isAuthenticated = (): boolean => {
   return !!getToken();
 };
 
+// Callback para cuando hay un error de autenticación
+let authErrorCallback: (() => void) | null = null;
+
+export const setAuthErrorCallback = (callback: (() => void) | null): void => {
+  authErrorCallback = callback;
+};
+
 // API call wrapper
 const apiCall = async <T>(
   endpoint: string,
@@ -111,6 +118,15 @@ const apiCall = async <T>(
   });
 
   if (!response.ok) {
+    // Si el error es 401 (Unauthorized) o 403 (Forbidden), limpiar la sesión
+    if (response.status === 401 || response.status === 403) {
+      logout();
+      if (authErrorCallback) {
+        authErrorCallback();
+      }
+      throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
+    }
+
     const error = await response.json().catch(() => ({ message: 'Error de conexión o respuesta inválida' }));
     throw new Error(error.message || `Error: ${response.status}`);
   }
