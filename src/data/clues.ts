@@ -13,7 +13,7 @@ export const clues: Record<string, string[]> = {
   "Océano": ["Agua salada", "Muy grande", "Cubre la tierra"],
   "Isla": ["Rodeada de agua", "Destino tropical", "Playas alrededor"],
   "Selva": ["Muy húmeda", "Plantas densas", "Animales exóticos"],
-  "Sabana": ["Llanura africana", "Leones viven aquí", "Pocas árboles"],
+  "Sabana": ["Llanura africana", "Leones viven aquí", "Pocos árboles"],
   "Pradera": ["Pasto extenso", "Vacas pastan", "Campo abierto"],
   "Cañón": ["Valle profundo", "Paredes de roca", "Formación natural"],
 

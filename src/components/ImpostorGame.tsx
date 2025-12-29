@@ -11,6 +11,14 @@ import { clues } from '../data/clues';
 
 type GameState = 'mode-selection' | 'setup' | 'playing' | 'finished' | 'online';
 
+const generateFallbackClue = (word: string): string => {
+  const fallbackClues = [
+    `Empieza por "${word.charAt(0)}"`,
+    `Tiene ${word.length} letras`
+  ];
+  return fallbackClues[Math.floor(Math.random() * fallbackClues.length)];
+};
+
 const ImpostorGame = () => {
   const [gameState, setGameState] = useState<GameState>('mode-selection');
   const [totalPlayers, setTotalPlayers] = useState(0);
@@ -56,12 +64,7 @@ const ImpostorGame = () => {
       } else {
         // Generate fallback clues when no clues exist for the word
         indices.forEach((impostorIdx) => {
-          const fallbackClues = [
-            `Empieza por "${word.charAt(0)}"`,
-            `Tiene ${word.length} letras`
-          ];
-          const randomFallback = fallbackClues[Math.floor(Math.random() * fallbackClues.length)];
-          cluesMap[impostorIdx] = randomFallback;
+          cluesMap[impostorIdx] = generateFallbackClue(word);
         });
       }
       
