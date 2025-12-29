@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 
 interface SetupScreenProps {
-  onStartGame: (playerCount: number, customWord: string, impostorCount: number) => void;
+  onStartGame: (playerCount: number, customWord: string, impostorCount: number, useClues: boolean) => void;
 }
 
 const SetupScreen = ({ onStartGame }: SetupScreenProps) => {
   const [playerCount, setPlayerCount] = useState(3);
   const [impostorCount, setImpostorCount] = useState(1);
+  const [useClues, setUseClues] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     const customWord = (form.elements.namedItem('customWord') as HTMLInputElement).value.trim();
-    onStartGame(playerCount, customWord, impostorCount);
+    onStartGame(playerCount, customWord, impostorCount, useClues);
   };
 
   return (
@@ -79,6 +80,19 @@ const SetupScreen = ({ onStartGame }: SetupScreenProps) => {
           name="customWord"
           placeholder="Deja en blanco para palabra aleatoria" 
         />
+      </div>
+      <div className="form-group">
+        <label htmlFor="useClues" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+          <input 
+            type="checkbox" 
+            id="useClues" 
+            name="useClues"
+            checked={useClues}
+            onChange={(e) => setUseClues(e.target.checked)}
+            style={{ marginRight: '10px', cursor: 'pointer' }}
+          />
+          Dar pistas a los impostores
+        </label>
       </div>
       <button type="submit" className="btn-start">Comenzar Juego</button>
     </form>
